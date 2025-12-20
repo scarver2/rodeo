@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "🔎 Preflight: scanning for common secret patterns..."
+if git grep -nE '(SMTP_|MAIL_|BEGIN (RSA|EC|OPENSSH)? ?PRIVATE KEY|PRIVATE KEY-----|AWS_(ACCESS|SECRET)|SECRET_KEY_BASE|API[_-]?KEY|TOKEN|PASSWORD)' -- \
+  ':!Gemfile.lock' ':!package-lock.json' ':!pnpm-lock.yaml' ':!yarn.lock'
+then
+  echo
+  echo "⚠️  Possible secrets found above. Fix before pushing."
+  exit 1
+else
+  echo "✅ No common secret patterns found."
+fi
+

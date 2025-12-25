@@ -1,13 +1,31 @@
 # Rodeo
 The [Sinatra](https://sinatrarb.com) web application for [Texas Embroidery Ranch](https://www.texasembroideryranch.com).
 
-## Installation
+## Developer Notes
 
+### Prerequisites & Installation
+Assuming a working Ruby environment, install the gem dependencies:
 ```bash
 bundle install
 ```
 
-## Developer Notes
+### Continuous Integration
+Full linting, testing, and browser reloading:
+```bash
+bundle exec guard
+```
+
+### Testing
+
+* Uses RSpec to test the entire application. 
+* Uses Capybara to test the web interface.
+
+Run the test suite
+```bash
+bundle exec rspec
+```
+
+### Environment Variables & Secrets
 Secrets live in .kamal/secrets and are never committed.
 
 ## License

@@ -1,9 +1,17 @@
 service: rodeo
-image: ghcr.io/scarver2/rodeo
+image: scarver2/rodeo
+
+builder:
+  arch: amd64
 
 servers:
   web:
-    - texasembroideryranch.com
+    hosts:
+      - texasembroideryranch.com
+    proxy: false
+    options:
+      publish:
+        - "4001:3000"
 
 ssh:
   user: deploy
@@ -21,14 +29,4 @@ env:
   secret:
     - RODEO_SECRET_KEY_BASE
 
-# Host:4001 -> Container:3000
-ports:
-  - "4001:3000"
-
-healthcheck:
-  path: /healthz
-  port: 3000
-  interval: 5s
-
-deploy:
-  retain_containers: 5
+retain_containers: 5

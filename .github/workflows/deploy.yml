@@ -74,7 +74,7 @@ jobs:
           chmod 600 .kamal/secrets
 
           # IMPORTANT: stop/remove currently running Rodeo container(s) ON THE SERVER (not on the runner)
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes "${DEPLOY_USER}@${DEPLOY_HOST}" <<'EOF'
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes "deploy@texasembroideryranch.com" <<'EOF'
             set -e
             CONTAINERS="$(docker ps -q --filter label=service=rodeo)"
             if [ -n "$CONTAINERS" ]; then

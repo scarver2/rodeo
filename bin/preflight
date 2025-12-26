@@ -2,13 +2,36 @@
 set -euo pipefail
 
 echo "🔎 Preflight: scanning for common secret patterns..."
-if GIT_PAGER=cat git grep -nE '(SMTP_|MAIL_|BEGIN (RSA|EC|OPENSSH)? ?PRIVATE KEY|PRIVATE KEY-----|AWS_(ACCESS|SECRET)|SECRET_KEY_BASE|API[_-]?KEY|TOKEN|PASSWORD)' -- \
-  ':!Gemfile.lock' ':!package-lock.json' ':!pnpm-lock.yaml' ':!yarn.lock' ':!bin/preflight'
-then
+
+# Limit scan scope a bit
+EXCLUDES=(
+  --glob "!.git/**"
+  --glob "!node_modules/**"
+  --glob "!vendor/**"
+  --glob "!.bundle/**"
+  --glob "!tmp/**"
+  --glob "!log/**"
+)
+
+# Known-safe lines:
+# - GitHub Actions placeholders: ${{ secrets.SOMETHING }}
+# - Kamal secret names in config
+SAFE_LINE_REGEX='(\$\{\{\s*secrets\.[A-Z0-9_]+\s*\}\}|(^|[^A-Za-z0-9_])KAMAL_REGISTRY_PASSWORD([^A-Za-z0-9_]|$)|(^|[^A-Za-z0-9_])RODEO_SECRET_KEY_BASE([^A-Za-z0-9_]|$))'
+
+# Suspicious things we actually want to block
+SUSPECT_REGEX='(-----BEGIN (OPENSSH|RSA|EC|DSA|PRIVATE) KEY-----|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{60,}|(^|[^A-Za-z])(password|passwd|secret|token|api[_-]?key)[[:space:]]*[:=][[:space:]]*[^ <"{]{8,})'
+
+matches="$(
+  rg -n --no-heading --hidden "${EXCLUDES[@]}" -e "$SUSPECT_REGEX" . \
+    | rg -v -e "$SAFE_LINE_REGEX" \
+    || true
+)"
+
+if [[ -n "$matches" ]]; then
+  echo "$matches"
   echo
   echo "⚠️  Possible secrets found above. Fix before pushing."
   exit 1
 else
   echo "✅ No common secret patterns found."
 fi
-

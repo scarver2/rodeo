@@ -1,0 +1,10 @@
+services:
+  rodeo:
+    build: .
+    ports:
+      - "4001:3000"
+    environment:
+      RACK_ENV: production
+      PORT: "3000"
+      RODEO_SECRET_KEY_BASE: dev-secret
+

@@ -9,6 +9,6 @@ RSpec.describe 'Homepage', type: :feature do
 
   it 'loads successfully' do
     expect(page.status_code).to eq(200)
-    expect(page.text).to match(/Howdy, World!/i)
+    expect(page.text).to match(/Howdy, Y'all!/i)
   end
 end

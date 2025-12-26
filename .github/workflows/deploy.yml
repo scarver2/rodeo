@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Pre-deploy (Stop current Rodeo container)
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} <<'EOF'
-            set -e
-            docker rm -f $(docker ps -q --filter label=service=rodeo) || true
-          EOF
+      # - name: Pre-deploy (Stop current Rodeo container)
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} <<'EOF'
+      #       set -e
+      #       docker rm -f $(docker ps -q --filter label=service=rodeo) || true
+      #     EOF
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -79,6 +79,8 @@ jobs:
           RODEO_SECRET_KEY_BASE=$RODEO_SECRET_KEY_BASE
           EOF
           chmod 600 .kamal/secrets
+
+          docker rm -f $(docker ps -q --filter label=service=rodeo) || true
 
           kamal setup
           kamal deploy

@@ -29,4 +29,8 @@ env:
   secret:
     - RODEO_SECRET_KEY_BASE
 
+hooks:
+  before_deploy:
+    - docker rm -f $(docker ps -q --filter label=service=rodeo) || true
+
 retain_containers: 5

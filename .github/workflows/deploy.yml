@@ -55,16 +55,23 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           set -euo pipefail
+
           mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
           # Avoid HostKeyMismatch if the host key changed or we previously scanned a different key
           ssh-keygen -R texasembroideryranch.com 2>/dev/null || true
-          ssh-keygen -R 147.182.247.87 2>/dev/null || true
+          ssh-keyscan -t ed25519 -H texasembroideryranch.com >> ~/.ssh/known_hosts
 
-          # Pin the key we expect (ed25519) for both hostname + IP
-          ssh-keyscan -t ed25519 -H texasembroideryranch.com 147.182.247.87 >> ~/.ssh/known_hosts
+          # Create Kamal secrets file on the runner (not committed)
+          mkdir -p .kamal
+          cat > .kamal/secrets <<EOF
+          KAMAL_REGISTRY_PASSWORD=$KAMAL_REGISTRY_PASSWORD
+          RODEO_SECRET_KEY_BASE=$RODEO_SECRET_KEY_BASE
+          EOF
+          chmod 600 .kamal/secrets
 
           kamal setup
           kamal deploy

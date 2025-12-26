@@ -22,7 +22,6 @@ This is the 2025 deliverables for the Rodeo web application.
 ## Design
 - [ ] TailwindCSS theme
 - [ ] Responsive design
-- [ ]
 
 ## Technology
 - [ ] Sinatra
@@ -32,6 +31,11 @@ This is the 2025 deliverables for the Rodeo web application.
 ## Security
 - [ ] Deflect spam submissions
 - [ ] Scan uploaded files for viruses
+
+## Developer Experience
+- [ ] Continuous Integration
+- [ ] LiveReload
+- [ ] Notifications
 
 ## Testing
 - [ ] Rubocop

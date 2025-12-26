@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Load Bundler to access project-specific gems
+require 'bundler/setup'
+
+# Require your main project files or application entry point
+# This line will depend on your project structure
+# Example: require_relative "../lib/my_project"
+
+require 'irb' # or require `pry` if using that gem
+require 'irb/completion' # Optional: provides tab completion
+
+puts 'Loading project environment...'
+require_relative '../app'
+
+# If you use a modular app (subclassing Sinatra::Base), you might need
+# to set :run to false to prevent the app from starting immediately
+# when the file is required.
+RodeoApp.set :run, false # Replace MyApp with your application class name
+
+# Start the interactive session
+IRB.start
+# or Pry.start if using `pry`

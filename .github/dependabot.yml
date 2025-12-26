@@ -1,0 +1,59 @@
+version: 2
+
+updates:
+  # Ruby gems (Bundler)
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "07:00"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
+
+    # Group to reduce PR noise
+    groups:
+      rubocop:
+        patterns:
+          - "rubocop*"
+      rspec:
+        patterns:
+          - "rspec*"
+          - "capybara*"
+          - "rack-test"
+      guard:
+        patterns:
+          - "guard*"
+      devtools:
+        patterns:
+          - "better_errors"
+          - "binding_of_caller"
+          - "rack-mini-profiler"
+          - "simplecov*"
+          - "parallel_tests"
+          - "rspec_junit_formatter"
+      patch-and-minor:
+        update-types:
+          - "minor"
+          - "patch"
+
+    # Optional: keep PR titles clean
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "07:10"
+      timezone: "America/Chicago"
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+

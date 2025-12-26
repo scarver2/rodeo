@@ -1,3 +1,4 @@
+# common extraneous files
 *.gem
 *.rbc
 /.config
@@ -17,8 +18,12 @@
 # OS
 .DS_Store
 
-# Ignore Byebug command history file.
+# Ignore debugging history file.
 .byebug_history
+.rdbg_history
+
+# Ignore LSP tooling, https://github.com/Shopify/ruby-lsp
+.ruby-lsp/
 
 # Documentation cache and generated files:
 /.yardoc/
@@ -36,4 +41,3 @@
 
 # Used by RuboCop. Remote config files pulled in from inherit_from directive.
 # .rubocop-https?--*
-

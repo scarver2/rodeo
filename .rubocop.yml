@@ -1,1 +1,13 @@
 inherit_from: .rubocop_todo.yml
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.4
+
+Metrics/BlockLength:
+  Exclude:
+    - Guardfile
+
+Metrics/MethodLength:
+  Exclude:
+    - Guardfile

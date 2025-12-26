@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      RACK_ENV: test
+      CI: "true"
+      # If your SimpleCov is gated by COVERAGE, flip this to "true".
+      COVERAGE: "true"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4.8"
+          bundler-cache: true
+
+      - name: RuboCop (no autocorrect)
+        run: bundle exec rubocop --parallel
+
+      - name: RSpec
+        run: |
+          mkdir -p tmp/rspec
+          # If you have rspec_junit_formatter in the Gemfile, this produces CI-friendly output.
+          # If you don't, RSpec will still run fine; you can remove the --format line.
+          bundle exec rspec \
+            --format progress \
+            --format RspecJunitFormatter \
+            --out tmp/rspec/rspec.xml
+
+      - name: Upload RSpec report (JUnit XML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rspec-junit
+          path: tmp/rspec/rspec.xml
+          if-no-files-found: warn
+
+      - name: Upload coverage (if generated)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: warn
+
+      - name: Ensure repo is clean (CI must never modify files)
+        if: always()
+        run: |
+          git status --porcelain
+          test -z "$(git status --porcelain)"
+

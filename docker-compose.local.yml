@@ -1,0 +1,26 @@
+services:
+  traefik:
+    image: traefik:v3.2
+    command:
+      - --api.dashboard=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+    ports:
+      - "8080:8080" # Traefik dashboard (local only)
+      - "80:80" # HTTP for local routing
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  rodeo:
+    # For local bring-up, we’ll build from your repo’s Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      RACK_ENV: development
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.rodeo.rule=Host(`rodeo.local`)
+      - traefik.http.routers.rodeo.entrypoints=web
+      - traefik.http.services.rodeo.loadbalancer.server.port=3000

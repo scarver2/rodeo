@@ -1,0 +1,17 @@
+services:
+  rodeo:
+    build: .
+    volumes:
+      - .:/app
+    environment:
+      PORT: "9292"
+      RACK_ENV: production
+      RODEO_SECRET_KEY_BASE: ${RODEO_SECRET_KEY_BASE}
+    ports:
+      - "9292:9292"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9292/healthz" ]
+      interval: 3s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

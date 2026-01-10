@@ -7,11 +7,11 @@ RSpec.describe 'healthz', type: :request do
     get '/healthz'
   end
 
-  it 'returns 200 (if the endpoint exists)' do
+  it 'returns 200' do
     expect(last_response.status).to eq(200)
   end
 
-  it 'returns ok (if the endpoint exists)' do
+  it 'returns OK' do
     expect(last_response.body).to match(/OK/i)
   end
 end

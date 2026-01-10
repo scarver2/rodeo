@@ -3,12 +3,15 @@
 require_relative '../rack_helper'
 
 RSpec.describe 'healthz', type: :request do
-  it 'returns ok (if the endpoint exists)' do
+  before do
     get '/healthz'
+  end
 
-    skip "No /healthz route found (safe to ignore if you haven't added it yet)." if last_response.status == 404
-
+  it 'returns 200 (if the endpoint exists)' do
     expect(last_response.status).to eq(200)
-    expect(last_response.body).to match(/ok/i)
+  end
+
+  it 'returns ok (if the endpoint exists)' do
+    expect(last_response.body).to match(/OK/i)
   end
 end

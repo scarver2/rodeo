@@ -9,6 +9,6 @@ class RodeoApp < Sinatra::Base
   end
 
   get '/healthz' do
-    'ok'
+    'OK'
   end
 end

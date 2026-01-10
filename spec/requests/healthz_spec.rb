@@ -7,7 +7,7 @@ RSpec.describe 'healthz', type: :request do
     get '/healthz'
   end
 
-  it 'returns 200' do
+  it 'returns status code 200' do
     expect(last_response.status).to eq(200)
   end
 

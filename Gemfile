@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-# use Bundler 2.x
-
 source 'https://rubygems.org'
 
-ruby '3.4.8'
+ruby file: '.ruby-version'
 
 gem 'dotenv', require: false
 gem 'puma', '~> 7.1'

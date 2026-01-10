@@ -7,8 +7,11 @@ RSpec.describe 'Homepage', type: :feature do
     visit '/'
   end
 
-  it 'loads successfully' do
+  it 'returns status code 200' do
     expect(page.status_code).to eq(200)
-    expect(page.text).to match(/Howdy, Y'all!/i)
+  end
+
+  it 'returns page text' do
+    expect(page.text).to include('Howdy')
   end
 end

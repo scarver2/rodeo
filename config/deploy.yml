@@ -11,7 +11,7 @@ servers:
     proxy: false
     options:
       publish:
-        - "4001:3000"
+        - "9292:9292"
 
 ssh:
   user: deploy
@@ -25,7 +25,7 @@ registry:
 env:
   clear:
     RACK_ENV: production
-    PORT: "3000"
+    PORT: "9292"
   secret:
     - RODEO_SECRET_KEY_BASE
 

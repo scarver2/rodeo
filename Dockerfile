@@ -1,29 +1,45 @@
-FROM ruby:3.4.8-slim
+# Set Ruby version for the container
+ARG RUBY_VERSION=3.4.8
+FROM ruby:$RUBY_VERSION-slim
 
-ENV RACK_ENV=production \
-  BUNDLE_WITHOUT="development:test" \
-  BUNDLE_DEPLOYMENT=1 \
-  BUNDLE_PATH=/usr/local/bundle \
-  PORT=3000
+# Set Ruby environment variables
+ARG BUNDLE_PATH=/usr/local/bundle
+ARG BUNDLER_VERSION=4.0.3
+ARG RACK_ENV=production
+ARG BUNDLE_WITHOUT="development:test"
+ARG PORT=9292 # rackup default
 
-WORKDIR /app
-
-# minimal OS deps
-RUN apt-get update -y && apt-get install -y --no-install-recommends \
+# Install system dependencies
+RUN apt-get update -y \
+  && apt-get install -y --no-install-recommends \
   ca-certificates \
   build-essential \
-  curl \
-  && rm -rf /var/lib/apt/lists/*
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  /usr/share/doc \
+  /usr/share/man \
+  /var/cache/apt/archives
 
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
+# Set working directory
+WORKDIR /app
 
+# Set app environment variables
+ENV RACK_ENV=${RACK_ENV} \
+  BUNDLE_PATH=${BUNDLE_PATH} \
+  BUNDLE_WITHOUT=${BUNDLE_WITHOUT}
+
+# Install app dependencies
+RUN gem install bundler:$BUNDLER_VERSION
+COPY .ruby-version Gemfile Gemfile.lock ./
+RUN bundle install \
+  && rm -rf "${BUNDLE_PATH}"/ruby/*/cache \
+  "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+
+# Copy the rest of the application
 COPY . .
 
-EXPOSE 3000
+# Expose app TCP port
+EXPOSE $PORT
 
-HEALTHCHECK --interval=5s --timeout=2s --start-period=10s --retries=12 \
-  CMD curl -fsS http://127.0.0.1:3000/healthz || exit 1
-
-# run Rack/Sinatra app
-CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0", "-p", "3000"]
+# Run Sinatra Rack app, intentionally overrideable from the command line
+CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0"]

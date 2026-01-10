@@ -9,6 +9,19 @@ Assuming a working Ruby environment, install the gem dependencies:
 bundle install
 ```
 
+Add the following to your `/etc/hosts` file:
+```bash
+echo "127.0.0.1 rodeo.local" >> /etc/hosts
+```
+
+### Local Development
+
+* Uses Docker Compose to run a local development environment.
+
+```bash
+docker compose -f docker-compose.local.yml up --build
+```
+
 ### Continuous Integration
 Full linting, testing, and browser reloading:
 ```bash

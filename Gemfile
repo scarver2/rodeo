@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby file: '.ruby-version'
 
-gem 'dotenv', require: false
+gem 'activesupport'
 gem 'puma', '~> 7.1'
 gem 'rackup', '~> 2.3'
 gem 'sinatra'
@@ -12,7 +12,7 @@ gem 'sinatra'
 
 group :development do
   gem 'guard', require: false
-  gem 'guard-bundler', require: false
+  gem 'guard-bundler', require: false, github: 'scarver2/guard-bundler', branch: 'bundler-4'
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
 
@@ -28,6 +28,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'dotenv', require: false
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rake', require: false
@@ -39,7 +40,9 @@ group :test do
   gem 'parallel_tests', require: false # optional: big suite speed-up
   gem 'rack-test', require: false
   gem 'rspec', require: false
+  gem 'rspec-its', require: false
   gem 'rspec_junit_formatter', require: false # optional: CI artifacts
+  gem 'rspec-rails', require: false
   gem 'simplecov', require: false
   gem 'simplecov-cobertura', require: false # optional: CI-friendly XML
   gem 'timecop', require: false

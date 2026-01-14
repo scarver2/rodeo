@@ -4,11 +4,11 @@ source 'https://rubygems.org'
 
 ruby file: '.ruby-version'
 
-gem 'activesupport'
+gem 'activesupport', '~> 8.1'
 gem 'puma', '~> 7.1'
 gem 'rackup', '~> 2.3'
-gem 'sinatra'
-# gem 'sinatra-contrib', require: false
+gem 'sinatra', '~> 4.2'
+gem 'sinatra-contrib', '~> 4.2'
 
 group :development do
   gem 'guard', require: false

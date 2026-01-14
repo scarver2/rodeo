@@ -42,4 +42,5 @@ COPY . .
 EXPOSE $PORT
 
 # Run Sinatra Rack app, intentionally overrideable from the command line
-CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0"]
+# CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0"]
+CMD ["bundle", "exec", "rackup"]

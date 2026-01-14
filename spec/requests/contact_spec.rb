@@ -2,11 +2,11 @@
 
 require_relative '../rack_helper'
 
-RSpec.describe 'healthz', type: :request do
-  before { get '/healthz' }
+RSpec.describe 'contact', type: :request do
+  before { get '/contact' }
 
   subject(:response) { last_response }
 
   its(:status) { is_expected.to eq(200) }
-  its(:body)   { is_expected.to match(/OK/i) }
+  its(:body)   { is_expected.to match(/Contact/i) }
 end

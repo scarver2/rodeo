@@ -1,21 +1,20 @@
 # frozen_string_literal: true
 
-# # frozen_string_literal: true
+require_relative '../rack_helper'
 
-# require_relative '../rack_helper'
+RSpec.describe 'Contact form', type: :feature do
+  it 'submits the form and shows Thank You' do
+    visit '/contact'
 
-# RSpec.describe 'Contact', type: :feature do
-#   describe 'GET /contact' do
-#     before do
-#       visit '/contact'
-#     end
+    # These must match your form input names/labels
+    fill_in 'name', with: Faker::Name.name
+    fill_in 'email', with: Faker::Internet.email
+    fill_in 'message', with: Faker::Lorem.sentence
 
-#     it 'returns status code 200' do
-#       expect(page.status_code).to eq(200)
-#     end
+    # This must match your submit button text/value
+    click_button 'Send'
 
-#     it 'returns page text' do
-#       expect(page.text).to include('Contact Us')
-#     end
-#   end
-# end
+    expect(page).to have_current_path('/contact/thank_you')
+    expect(page).to have_content('Thank You')
+  end
+end

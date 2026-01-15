@@ -18,6 +18,8 @@ end
 #   use Rack::MiniProfiler
 # end
 
+require 'pry' if %w[development test].include?(ENV['RACK_ENV'])
+
 require 'active_support/all'
 
 Dir.glob('config/initializers/*.rb').each { |f| require_relative f }

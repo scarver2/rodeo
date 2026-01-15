@@ -2,12 +2,18 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.4
+  TargetRubyVersion: 4.0
 
 Metrics/BlockLength:
   Exclude:
     - Guardfile
+    - spec/**/*
 
 Metrics/MethodLength:
   Exclude:
     - Guardfile
+    - spec/**/*
+
+Naming/PredicateMethod:
+  Exclude:
+    - lib/contact_form_service.rb

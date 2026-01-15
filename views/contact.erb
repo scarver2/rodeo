@@ -1,14 +1,73 @@
-Contact Us
+<div class="megacontainer prose" style="margin: 0; padding: 1em 4em 2em; background-color: #fff;">
 
-<form action="/contact/new" method="POST">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required>
+<h1>Contact Us</h1>
+<form action="/contact/new" method="POST" class="mx-auto max-w-xl space-y-6 rounded-2xl  bg-white/80 p-6 backdrop-blur">
+  <% if @form.errors&.any? %>
+    <div role="alert" class="rounded-xl border border-red-200 bg-red-50 p-4 text-red-900">
+      <div class="font-semibold">Please fix the following:</div>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-sm">
+        <% @form.errors.each do |field, msg| %>
+          <li><strong class="capitalize"><%= field %></strong>: <%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required>
+  <input type="hidden" name="started_at" value="<%= @started_at %>">
 
-  <label for="message">Message:</label>
-  <textarea id="message" name="message" required></textarea>
+  <div class="hidden" aria-hidden="true" style="display: none;">
+    <label>Winnie the Pooh</label>
+    <input type="text" name="pooh_bear" value="" tabindex="-1" autocomplete="off" />
+  </div>
 
-  <button type="submit">Send</button>
+  <div class="space-y-2">
+    <label for="name" class="block text-sm font-medium text-stone-800">Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      required
+      value="<%= @form.name %>"
+      autocomplete="name"
+      class="block w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 shadow-sm outline-none placeholder:text-stone-400 focus:border-stone-900 focus:ring-2 focus:ring-stone-900/20"
+      placeholder="Your name"
+    />
+  </div>
+
+  <div class="space-y-2">
+    <label for="email" class="block text-sm font-medium text-stone-800">Email</label>
+    <input
+      type="email"
+      id="email"
+      name="email"
+      required
+      value="<%= @form.email %>"
+      autocomplete="email"
+      class="block w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 shadow-sm outline-none placeholder:text-stone-400 focus:border-stone-900 focus:ring-2 focus:ring-stone-900/20"
+      placeholder="you@example.com"
+    />
+  </div>
+
+  <div class="space-y-2">
+    <label for="message" class="block text-sm font-medium text-stone-800">Message</label>
+    <textarea
+      id="message"
+      name="message"
+      required
+      rows="6"
+      class="block w-full resize-y rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 shadow-sm outline-none placeholder:text-stone-400 focus:border-stone-900 focus:ring-2 focus:ring-stone-900/20"
+      placeholder="How can we help?"
+    ><%= @form.message %></textarea>
+    <p class="text-xs text-stone-500">We typically reply within 1 business day.</p>
+  </div>
+
+  <div class="pt-2">
+    <button
+      type="submit"
+      style="background-color: #000; color: #fff; padding: 1em 2em; border-radius: 4px; border: none; cursor: pointer;"
+    >
+      Send
+    </button>
+  </div>
 </form>
+</div>

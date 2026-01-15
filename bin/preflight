@@ -16,7 +16,7 @@ EXCLUDES=(
 # Known-safe lines:
 # - GitHub Actions placeholders: ${{ secrets.SOMETHING }}
 # - Kamal secret names in config
-SAFE_LINE_REGEX='(\$\{\{\s*secrets\.[A-Z0-9_]+\s*\}\}|(^|[^A-Za-z0-9_])KAMAL_REGISTRY_PASSWORD([^A-Za-z0-9_]|$)|(^|[^A-Za-z0-9_])RODEO_SECRET_KEY_BASE([^A-Za-z0-9_]|$))'
+SAFE_LINE_REGEX='(\$\{\{\s*secrets\.[A-Z0-9_]+\s*\}\}|(^|[^A-Za-z0-9_])KAMAL_REGISTRY_PASSWORD([^A-Za-z0-9_]|$)|(^|[^A-Za-z0-9_])RODEO_SECRET_KEY_BASE([^A-Za-z0-9_]|$)|ENV\.fetch\(\s*["'"'"'][A-Z0-9_]*(PASSWORD|PASS|SECRET|TOKEN|API[_-]?KEY|KEY)["'"'"']|ENV\[\s*["'"'"'][A-Z0-9_]*(PASSWORD|PASS|SECRET|TOKEN|API[_-]?KEY|KEY)["'"'"']\s*\])'
 
 # Suspicious things we actually want to block
 SUSPECT_REGEX='(-----BEGIN (OPENSSH|RSA|EC|DSA|PRIVATE) KEY-----|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{60,}|(^|[^A-Za-z])(password|passwd|secret|token|api[_-]?key)[[:space:]]*[:=][[:space:]]*[^ <"{]{8,})'

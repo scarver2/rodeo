@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sinatra/base'
+require_relative 'lib/contact_form_service'
 
 # The entry point for the application
 class RodeoApp < Sinatra::Base
@@ -13,10 +14,17 @@ class RodeoApp < Sinatra::Base
   end
 
   get '/contact' do
+    @form = ContactFormService.new({})
     erb :contact
   end
 
   post '/contact/new' do
+    # @form = ContactFormService.new(params)
+    # if @form.call
+    #   redirect '/contact/thank_you'
+    # else
+    #   erb :contact, alert: @form.errors
+    # end
     redirect '/contact/thank_you'
   end
 
@@ -42,7 +50,7 @@ class RodeoApp < Sinatra::Base
     end
   end
 
-  %w[about].each do |path|
+  %w[about services].each do |path|
     get "/#{path}" do
       erb path.underscore.to_sym
     end

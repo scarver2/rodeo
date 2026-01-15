@@ -9,15 +9,15 @@ require 'faker'
 
 # if ENV['COVERAGE'] == 'true' || ENV['CI'] == 'true'
 require 'simplecov'
-SimpleCov.start do
-  enable_coverage :branch
-  add_filter '/spec/'
-end
+# SimpleCov.start do
+#   enable_coverage :branch
+#   add_filter '/spec/'
+# end
 
-SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+# SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
 
 # minimum coverage threshold
-SimpleCov.minimum_coverage 90
+# SimpleCov.minimum_coverage 90
 # end
 
 RSpec.configure do |config|

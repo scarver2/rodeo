@@ -5,6 +5,7 @@ ENV['RACK_ENV'] ||= 'test'
 require 'bundler/setup'
 require 'rspec'
 require 'rspec/its'
+require 'faker'
 
 # if ENV['COVERAGE'] == 'true' || ENV['CI'] == 'true'
 require 'simplecov'

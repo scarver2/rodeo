@@ -37,6 +37,7 @@ end
 
 group :test do
   gem 'capybara', require: false
+  gem 'faker', require: false
   gem 'parallel_tests', require: false # optional: big suite speed-up
   gem 'rack-test', require: false
   gem 'rspec', require: false

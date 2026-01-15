@@ -7,11 +7,8 @@ RSpec.describe 'healthz', type: :request do
     get '/healthz'
   end
 
-  it 'returns status code 200' do
-    expect(last_response.status).to eq(200)
-  end
+  subject(:response) { last_response }
 
-  it 'returns OK' do
-    expect(last_response.body).to match(/OK/i)
-  end
+  its(:status) { is_expected.to eq(200) }
+  its(:body)   { is_expected.to match(/OK/i) }
 end

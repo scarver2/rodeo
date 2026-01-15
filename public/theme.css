@@ -1,0 +1,22 @@
+body {
+    background-color: #19324a;
+}
+
+.desert {
+    min-height: 100vh;
+    background-image: url(/images/vecteezy_wild-west-modern-minimal-flat-background_.jpg);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    backgroundattachment: fixed;
+}
+
+.main {
+    margin: 0 4rem;
+}
+
+.main main {
+    background-color: white;
+    padding: 2rem;
+    width: 100%;
+}

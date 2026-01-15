@@ -1,10 +1,10 @@
 # Set Ruby version for the container
-ARG RUBY_VERSION=3.4.8
+ARG RUBY_VERSION=4.0.1
 FROM ruby:$RUBY_VERSION-slim
 
 # Set Ruby environment variables
 ARG BUNDLE_PATH=/usr/local/bundle
-ARG BUNDLER_VERSION=2.6.9
+ARG BUNDLER_VERSION=4.0.3
 ARG RACK_ENV=production
 ARG BUNDLE_WITHOUT="development:test"
 ARG PORT=9292 # rackup default

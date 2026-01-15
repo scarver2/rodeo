@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 ruby file: '.ruby-version'
 
 gem 'activesupport', '~> 8.1'
+gem 'mail', '~> 2.9'
 gem 'puma', '~> 7.1'
 gem 'rackup', '~> 2.3'
 gem 'sinatra', '~> 4.2'

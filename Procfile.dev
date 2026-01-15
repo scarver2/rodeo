@@ -1,3 +1,4 @@
 # TODO: css: npm run tw:watch
+# TODO: tailwindcss -i ./app/assets/stylesheets/application.css -o ./app/assets/stylesheets/application.css --watch
 web: bundle exec rackup -o 0.0.0.0 -p ${PORT:-9292}
 guard: bundle exec guard

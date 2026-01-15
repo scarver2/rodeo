@@ -12,6 +12,6 @@ RSpec.describe 'Homepage', type: :feature do
   end
 
   it 'returns page text' do
-    expect(page.text).to include('Howdy')
+    expect(page.text).to include('Texas Embroidery Ranch')
   end
 end

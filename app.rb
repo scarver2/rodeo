@@ -24,27 +24,37 @@ class RodeoApp < Sinatra::Base
     erb :thank_you
   end
 
-  get '/privacy-policy.html' do
-    redirect to('/privacy-policy'), 302
+  # redirects legacy pages to new pages
+  %w[privacy-policy
+     sms-policy
+     terms-of-service
+     colors
+     fonts
+     monograms
+     leather-patches
+     artwork-specs].each do |path|
+    get "/#{path}.html" do
+      redirect to(path), 302
+    end
+
+    get "/#{path}" do
+      erb path.underscore.to_sym
+    end
   end
 
-  get '/privacy-policy' do
-    erb :privacy_policy
+  %w[about].each do |path|
+    get "/#{path}" do
+      erb path.underscore.to_sym
+    end
   end
 
-  get '/sms-policy.html' do
-    redirect to('/sms-policy'), 302
+  not_found do
+    status 404
+    erb :'404', layout: false
   end
 
-  get '/sms-policy' do
-    erb :sms_policy
-  end
-
-  get '/terms-of-service.html' do
-    redirect to('/terms-of-service'), 302
-  end
-
-  get '/terms-of-service' do
-    erb :terms_of_service
+  error do
+    status 500
+    erb :'500', layout: false
   end
 end

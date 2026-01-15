@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 ruby file: '.ruby-version'
 
-gem 'dotenv', require: false
+gem 'activesupport', '~> 8.1'
 gem 'puma', '~> 7.1'
 gem 'rackup', '~> 2.3'
 gem 'sinatra', '~> 4.2'
@@ -28,6 +28,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'dotenv', require: false
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rake', require: false
@@ -41,6 +42,7 @@ group :test do
   gem 'rspec', require: false
   gem 'rspec-its', require: false
   gem 'rspec_junit_formatter', require: false # optional: CI artifacts
+  gem 'rspec-rails', require: false
   gem 'simplecov', require: false
   gem 'simplecov-cobertura', require: false # optional: CI-friendly XML
   gem 'timecop', require: false

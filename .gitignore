@@ -44,6 +44,3 @@
 
 # Ignore kamal config
 /.kamal
-
-# Ignore mise config
-mise.toml

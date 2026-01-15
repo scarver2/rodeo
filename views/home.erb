@@ -1,0 +1,20 @@
+<%
+video_url="/videos/movie.mp4"
+%>
+
+<div class="megacontainer prose" style="margin: 0; padding: 0; background-color: #000;">
+<div>
+    <div class="absolute inset-0 bg-black/20 text-white text-center font-bold text-2xl" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">Quality embroidery... <i>FAST!</i></div>
+
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+    >
+      <source src="<%= video_url %>" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+</div>
+</div>

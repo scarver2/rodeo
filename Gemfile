@@ -5,27 +5,26 @@ source 'https://rubygems.org'
 ruby file: '.ruby-version'
 
 gem 'activesupport', '~> 8.1'
-gem 'mail', '~> 2.9'
+gem 'pony', '~> 1.13'
 gem 'puma', '~> 7.1'
 gem 'rackup', '~> 2.3'
 gem 'sinatra', '~> 4.2'
 gem 'sinatra-contrib', '~> 4.2'
 
 group :development do
+  gem 'better_errors', require: false
+  gem 'binding_of_caller', require: false # required by better_errors
+  gem 'debug', require: false
   gem 'guard', require: false
   gem 'guard-bundler', require: false, github: 'scarver2/guard-bundler', branch: 'bundler-4'
+  gem 'guard-livereload', require: false
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
-
-  gem 'guard-livereload', require: false
-  gem 'rack-livereload', require: false
-  gem 'terminal-notifier-guard', '~> 1.7', require: false
-
-  gem 'better_errors', require: false
-  gem 'binding_of_caller', require: false
-  gem 'debug', require: false
+  gem 'ostruct', require: false # required by guard
+  gem 'rack-livereload', require: false # required by guard-livereload
   gem 'rack-mini-profiler', require: false
   gem 'stackprof', require: false # optional, deeper profiling
+  gem 'terminal-notifier-guard', '~> 1.7', require: false # required by guard-livereload
 end
 
 group :development, :test do

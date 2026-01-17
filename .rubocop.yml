@@ -1,15 +1,25 @@
+# .rubocop.yml
 inherit_from: .rubocop_todo.yml
 
 AllCops:
   NewCops: enable
   TargetRubyVersion: 4.0
 
+Metrics/AbcSize:
+  Exclude:
+    - lib/contact_form.rb
+
 Metrics/BlockLength:
   Exclude:
     - Guardfile
     - spec/**/*
 
+Metrics/CollectionLiteralLength:
+  Exclude:
+    - config/initializers/isacords.rb
+
 Metrics/MethodLength:
   Exclude:
     - Guardfile
+    - lib/contact_mailer.rb
     - spec/**/*

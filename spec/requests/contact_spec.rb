@@ -1,3 +1,4 @@
+# spec/requests/contact_spec.rb
 # frozen_string_literal: true
 
 require_relative '../rack_helper'
@@ -12,12 +13,48 @@ RSpec.describe 'contact', type: :request do
 end
 
 RSpec.describe 'contact/new', type: :request do
-  before { post '/contact/new' }
+  context 'when no params are provided' do
+    before do
+      params = { name: '',
+                 email: '',
+                 phone: '',
+                 message: '' }
+      post '/contact/new', params
+    end
+    subject(:response) { last_response }
 
-  subject(:response) { last_response }
+    its(:status) { is_expected.to eq(200) }
+    its(:body)   { is_expected.to match(/Error/i) }
+  end
 
-  its(:status) { is_expected.to eq(302) }
-  # its(:body)   { is_expected.to match(/Thank You/i) }
+  context 'when params are provided' do
+    before do
+      params = { name: Faker::Name.name,
+                 email: Faker::Internet.email,
+                 phone: Faker::PhoneNumber.phone_number,
+                 message: Faker::Lorem.sentence }
+      post '/contact/new', params
+    end
+
+    subject(:response) { last_response }
+
+    its(:status) { is_expected.to eq(303) }
+  end
+  context 'when honeypot params are provided' do
+    before do
+      params = { name: Faker::Name.name,
+                 email: Faker::Internet.email,
+                 phone: Faker::PhoneNumber.phone_number,
+                 message: Faker::Lorem.sentence,
+                 company: 'spam' }
+      post '/contact/new', params
+    end
+
+    subject(:response) { last_response }
+
+    its(:status) { is_expected.to eq(200) }
+    its(:body)   { is_expected.to match(/Error/i) }
+  end
 end
 
 RSpec.describe 'contact/thank_you', type: :request do

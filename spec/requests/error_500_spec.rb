@@ -1,3 +1,4 @@
+# spec/requests/error_500_spec.rb
 # frozen_string_literal: true
 
 require_relative '../rack_helper'
@@ -5,7 +6,7 @@ require_relative '../rack_helper'
 RSpec.describe 'page errors', type: :request do
   before do
     # Ensure Sinatra does NOT re-raise exceptions in test,
-    # so your `error do ... end` handler actually runs.
+    # so the `error do ... end` handler actually runs.
     app.set :raise_errors, false
     app.set :show_exceptions, false
     app.set :dump_errors, false
@@ -23,11 +24,6 @@ RSpec.describe 'page errors', type: :request do
     get '/'
 
     expect(last_response.status).to eq(500)
-
-    # Optional (if your views/500.erb contains a known marker):
-    # expect(last_response.body).to include("500")
-    #
-    # Optional (if your layout has a known marker you can assert is absent):
-    # expect(last_response.body).not_to include("LAYOUT-WAS-USED")
+    expect(last_response.body).to include('Error Occurred')
   end
 end

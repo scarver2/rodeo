@@ -1,3 +1,4 @@
+# spec/support/app.rb
 # frozen_string_literal: true
 
 require 'rack/builder'

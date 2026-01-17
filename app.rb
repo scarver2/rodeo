@@ -1,7 +1,23 @@
+# app.rb
 # frozen_string_literal: true
 
+LEGACY_PAGES = %w[
+  privacy-policy
+  sms-policy
+  terms-of-service
+  colors
+  fonts
+  monograms
+  leather-patches
+  artwork-specs
+].freeze
+
+PAGES = LEGACY_PAGES + %w[
+  about
+  services
+].freeze
+
 require 'sinatra/base'
-require_relative 'lib/contact_form_service'
 
 # The entry point for the application
 class RodeoApp < Sinatra::Base
@@ -14,43 +30,33 @@ class RodeoApp < Sinatra::Base
   end
 
   get '/contact' do
-    @form = ContactFormService.new({})
+    @form = ContactForm.new({})
     erb :contact
   end
 
   post '/contact/new' do
-    # @form = ContactFormService.new(params)
-    # if @form.call
-    #   redirect '/contact/thank_you'
-    # else
-    #   erb :contact, alert: @form.errors
-    # end
-    redirect '/contact/thank_you'
+    @form = ContactForm.new(params)
+    if @form.valid?
+      ContactMailer.new(@form).deliver
+      redirect '/contact/thank_you', RedirectStatus::POST_TO_GET
+    else
+      erb :contact
+    end
   end
 
   get '/contact/thank_you' do
     erb :thank_you
   end
 
-  # redirects legacy pages to new pages
-  %w[privacy-policy
-     sms-policy
-     terms-of-service
-     colors
-     fonts
-     monograms
-     leather-patches
-     artwork-specs].each do |path|
+  # redirects legacy *.html pages to new pages
+  LEGACY_PAGES.each do |path|
     get "/#{path}.html" do
-      redirect to(path), 302
-    end
-
-    get "/#{path}" do
-      erb path.underscore.to_sym
+      redirect to(path), RedirectStatus::PERMANENT
     end
   end
 
-  %w[about services].each do |path|
+  # renders pages
+  PAGES.each do |path|
     get "/#{path}" do
       erb path.underscore.to_sym
     end

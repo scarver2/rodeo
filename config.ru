@@ -1,3 +1,4 @@
+# config.ru
 # frozen_string_literal: true
 
 ENV['RACK_ENV'] ||= 'development'
@@ -25,6 +26,7 @@ require 'pry' if %w[development test].include?(ENV['RACK_ENV'])
 
 require 'active_support/all'
 
+Dir.glob('lib/*.rb').each { |f| require_relative f }
 Dir.glob('config/initializers/*.rb').each { |f| require_relative f }
 require_relative 'app'
 

@@ -4,17 +4,23 @@
 # The contact form
 class ContactForm
   attr_accessor :name, :email, :phone, :message
-  attr_reader :honeypot
+  attr_reader :attachment, :honeypot
 
   HONEYPOT_FIELD = 'company'
 
   def initialize(params)
     @params = params
-    @name = params[:name]
-    @email = params[:email]
-    @phone = params[:phone]
-    @message = params[:message]
-    @honeypot = params[HONEYPOT_FIELD.to_sym]
+
+    # Support both symbol and string keys (Rack params are often strings)
+    @name    = fetch(:name)
+    @email   = fetch(:email)
+    @phone   = fetch(:phone)
+    @message = fetch(:message)
+    @honeypot = fetch(HONEYPOT_FIELD)
+
+    # Single attachment payload:
+    # { filename: "artwork.png", tempfile: <Tempfile> }
+    @attachment = normalize_attachment(fetch(:attachment))
   end
 
   def errors
@@ -35,5 +41,30 @@ class ContactForm
 
   def valid?
     name.present? && email.present? && phone.present? && !spam?
+  end
+
+  private
+
+  def fetch(key)
+    return nil if @params.nil?
+
+    # Allow callers to pass String keys directly (like 'company')
+    if key.is_a?(String)
+      @params[key] || @params[key.to_sym]
+    else
+      @params[key] || @params[key.to_s]
+    end
+  end
+
+  def normalize_attachment(value)
+    return nil if value.nil?
+
+    filename = value[:filename] || value['filename']
+    tempfile = value[:tempfile] || value['tempfile']
+
+    return nil if filename.to_s.strip.empty?
+    return nil if tempfile.nil?
+
+    { filename: filename, tempfile: tempfile }
   end
 end

@@ -43,4 +43,27 @@ RSpec.describe ContactForm do
 
     expect(form.spam?).to be_truthy
   end
+
+  it 'accepts a single attachment (uploaded file payload)' do
+    tempfile = Tempfile.new(['artwork', '.png'])
+    tempfile.binmode
+    tempfile.write('PNGDATA')
+    tempfile.rewind
+
+    form = ContactForm.new(
+      name: 'John Doe',
+      email: 'john@example.com',
+      phone: '1234567890',
+      message: 'Hello',
+      attachment: {
+        filename: 'artwork.png',
+        tempfile: tempfile
+      }
+    )
+
+    expect(form).to respond_to(:attachment)
+    expect(form.attachment).not_to be_nil
+  ensure
+    tempfile.close!
+  end
 end

@@ -10,7 +10,13 @@ class ContactMailer
   end
 
   def deliver
-    Pony.mail(
+    Pony.mail(payload)
+  end
+
+  private
+
+  def payload
+    hsh = {
       from: ENV.fetch('CONTACT_FROM'),
       to: ENV.fetch('CONTACT_TO'),
       reply_to: @form.email,
@@ -18,10 +24,43 @@ class ContactMailer
       body: body,
       via: :smtp,
       via_options: smtp_options
-    )
+    }
+
+    attachment = attachment_payload
+    hsh[:attachments] = attachment if attachment
+
+    hsh
   end
 
-  private
+  # def attachment_payload
+  #   return unless @form.attachment
+
+  #   {
+  #     filename: @form.attachment[:filename],
+  #     tempfile: @form.attachment[:tempfile]
+  #   }
+  # end
+
+  def attachment_payload
+    return nil unless @form.respond_to?(:attachment)
+
+    att = @form.attachment
+    return nil if att.nil?
+
+    filename = att[:filename] || att['filename']
+    tempfile = att[:tempfile] || att['tempfile']
+
+    return nil if filename.to_s.strip.empty?
+    return nil if tempfile.nil?
+
+    tempfile.binmode if tempfile.respond_to?(:binmode)
+    tempfile.rewind if tempfile.respond_to?(:rewind)
+    data = tempfile.read
+
+    return nil if data.nil?
+
+    { filename => data }
+  end
 
   def smtp_options
     {

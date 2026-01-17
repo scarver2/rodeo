@@ -13,7 +13,3 @@ Metrics/MethodLength:
   Exclude:
     - Guardfile
     - spec/**/*
-
-Naming/PredicateMethod:
-  Exclude:
-    - lib/contact_form_service.rb

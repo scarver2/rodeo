@@ -86,6 +86,7 @@
           ><%= @form.message %></textarea>
       </div>
 
+      <div class="hidden" aria-hidden="true" style="display: none;">
       <div class="space-y-2">
           <label for="attachment" class="block text-sm font-medium text-stone-800">Attachment</label>
           <input
@@ -95,6 +96,7 @@
           class="block w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 shadow-sm outline-none placeholder:text-stone-400 focus:border-stone-900 focus:ring-2 focus:ring-stone-900/20"
           />
           <p class="hint">Attach artwork or photo. Adobe Illustrator, EPS, GIF, JPEG, PDF, or PNG format supported.</p>
+      </div>
       </div>
 
       <input type="hidden" name="started_at" value="<%= Time.now %>" />
@@ -111,8 +113,9 @@
       </form>
     </div>
     <div>
-      <!-- TODO: add better image of map and link to map -->
-      <img src="/images/map-20250711.png" alt="map" />
+      <a href="https://maps.apple/p/gR6mww.KZnGeg8" title="Get directions to Texas Embroidery Ranch">
+        <img src="/images/map-20260117.png" alt="map" />
+      </a>
     </div>
   </div>
 </div>

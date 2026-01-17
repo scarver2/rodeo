@@ -3,22 +3,13 @@
 ENV['RACK_ENV'] ||= 'test'
 
 require 'bundler/setup'
+require 'faker'
 require 'rspec'
 require 'rspec/its'
-require 'faker'
+require 'simplecov' # TODO: if ENV['COVERAGE'] == 'true' || ENV['CI'] == 'true'
 
-# if ENV['COVERAGE'] == 'true' || ENV['CI'] == 'true'
-require 'simplecov'
-# SimpleCov.start do
-#   enable_coverage :branch
-#   add_filter '/spec/'
-# end
-
-# SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
-
-# minimum coverage threshold
-# SimpleCov.minimum_coverage 90
-# end
+# Load all support helpers
+Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 
 RSpec.configure do |config|
   config.after { Timecop.return if defined?(Timecop) }

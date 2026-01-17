@@ -20,3 +20,29 @@ body {
     padding: 2rem;
     width: 100%;
 }
+
+.megacontainer.prose {
+    margin: 0;
+    padding: 1em 4em 2em;
+    background-color: #f7f0e6;
+    color: #27354b;
+}
+
+form .errors {
+    color: red;
+    border: 1px solid red;
+    background-color: #f7f0e6;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+form .errors ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+form .errors li {
+    padding-left: 1em;
+    margin-bottom: .5em;
+}

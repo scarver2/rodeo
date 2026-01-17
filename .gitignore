@@ -43,3 +43,6 @@
 
 # Ignore kamal config
 /.kamal
+
+# Dev notes
+NOTES.md

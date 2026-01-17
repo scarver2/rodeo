@@ -6,8 +6,10 @@ ENV['RACK_ENV'] ||= 'development'
 require 'bundler/setup'
 Bundler.require(:default, ENV['RACK_ENV'].to_sym)
 
-require 'dotenv'
-Dotenv.load('.env', '.env.local') # or Dotenv.overload if you want it to win
+if %w[development test].include?(ENV['RACK_ENV'])
+  require 'dotenv'
+  Dotenv.load('.env', '.env.local') # or Dotenv.overload if you want it to win
+end
 
 # Rack LiveReload middleware # TODO: move to `config/environments/development.rb`
 if ENV['RACK_ENV'] == 'development'

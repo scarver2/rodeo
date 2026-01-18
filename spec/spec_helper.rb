@@ -1,23 +1,21 @@
+# spec/spec_helper.rb
 # frozen_string_literal: true
 
 ENV['RACK_ENV'] ||= 'test'
 
 require 'bundler/setup'
+require 'dotenv'
+require 'faker'
+require 'pry'
 require 'rspec'
 require 'rspec/its'
+require 'simplecov' # TODO: if ENV['COVERAGE'] == 'true' || ENV['CI'] == 'true'
 
-# if ENV['COVERAGE'] == 'true' || ENV['CI'] == 'true'
-require 'simplecov'
-SimpleCov.start do
-  enable_coverage :branch
-  add_filter '/spec/'
-end
+# Load test environment variables
+Dotenv.overload('.env.test', '.env.test.local') # local overrides are handy
 
-SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
-
-# minimum coverage threshold
-SimpleCov.minimum_coverage 90
-# end
+# Load all support helpers
+Dir[File.expand_path('support/**/*.rb', __dir__)].each { |f| require f }
 
 RSpec.configure do |config|
   config.after { Timecop.return if defined?(Timecop) }

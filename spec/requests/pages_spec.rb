@@ -1,3 +1,4 @@
+# spec/requests/pages_spec.rb
 # frozen_string_literal: true
 
 require_relative '../rack_helper'
@@ -38,7 +39,7 @@ RSpec.describe 'Legacy Pages Redirect', type: :feature do
 
       subject(:response) { last_response }
 
-      its(:status) { is_expected.to eq(302) }
+      its(:status) { is_expected.to eq(301) }
     end
   end
 end
@@ -61,7 +62,6 @@ RSpec.describe 'Web Pages', type: :feature do
       subject(:response) { last_response }
 
       its(:status) { is_expected.to eq(200) }
-      # its(:body)   { is_expected.to match(/#{path}/i) }
     end
   end
 end

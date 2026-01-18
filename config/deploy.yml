@@ -1,32 +1,34 @@
+# kamal-proxy doesn't work with our nginx reverse proxy
+# On server, stop the docker process for the container:
+# `docker ps --filter "publish=9292" --format "{{.ID}}" | xargs -r docker stop`
 service: rodeo
 image: scarver2/rodeo
-
-builder:
-  arch: amd64
 
 servers:
   web:
     hosts:
       - texasembroideryranch.com
-    proxy: false
     options:
       publish:
-        - "9292:9292"
-
+        - "127.0.0.1:9292:9292"
+    proxy: false
 ssh:
   user: deploy
-
 registry:
-  server: ghcr.io
-  username: scarver2
-  password:
-    - KAMAL_REGISTRY_PASSWORD
+  server: localhost:5555
+# GitHub Container Registry
+# registry:
+#   server: ghcr.io
+#   username: scarver2
+#   password:
+#     - KAMAL_REGISTRY_PASSWORD
+builder:
+  arch: amd64
+# env:
+#   clear:
+#     RACK_ENV: production
+#     PORT: "9292"
+  # secret:
+  #   - RODEO_SECRET_KEY_BASE
 
-env:
-  clear:
-    RACK_ENV: production
-    PORT: "9292"
-  secret:
-    - RODEO_SECRET_KEY_BASE
-
-retain_containers: 5
+# retain_containers: 5

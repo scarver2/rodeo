@@ -1,0 +1,16 @@
+<%
+video_url="/videos/movie.mp4"
+%>
+
+<div class="megacontainer" style="margin: 0; padding: 0;">
+  <video
+    autoplay
+    muted
+    loop
+    playsinline
+      preload="metadata"
+    >
+    <source src="<%= video_url %>" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>

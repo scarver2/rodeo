@@ -1,4 +1,21 @@
+# app.rb
 # frozen_string_literal: true
+
+LEGACY_PAGES = %w[
+  privacy-policy
+  sms-policy
+  terms-of-service
+  colors
+  fonts
+  monograms
+  leather-patches
+  artwork-specs
+].freeze
+
+PAGES = LEGACY_PAGES + %w[
+  about
+  services
+].freeze
 
 require 'sinatra/base'
 
@@ -12,25 +29,34 @@ class RodeoApp < Sinatra::Base
     'OK'
   end
 
-  # redirects legacy pages to new pages
-  %w[privacy-policy
-     sms-policy
-     terms-of-service
-     colors
-     fonts
-     monograms
-     leather-patches
-     artwork-specs].each do |path|
-    get "/#{path}.html" do
-      redirect to(path), 302
-    end
+  get '/contact' do
+    @form = ContactForm.new({})
+    erb :contact
+  end
 
-    get "/#{path}" do
-      erb path.underscore.to_sym
+  post '/contact/new' do
+    @form = ContactForm.new(params)
+    if @form.valid?
+      ContactMailer.new(@form).deliver
+      redirect '/contact/thank_you', RedirectStatus::POST_TO_GET
+    else
+      erb :contact
     end
   end
 
-  %w[about].each do |path|
+  get '/contact/thank_you' do
+    erb :thank_you
+  end
+
+  # redirects legacy *.html pages to new pages
+  LEGACY_PAGES.each do |path|
+    get "/#{path}.html" do
+      redirect to(path), RedirectStatus::PERMANENT
+    end
+  end
+
+  # renders pages
+  PAGES.each do |path|
     get "/#{path}" do
       erb path.underscore.to_sym
     end

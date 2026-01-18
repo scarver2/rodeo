@@ -13,7 +13,6 @@
 
 # Used by dotenv library to load environment variables.
 .env
-/.env.*
 
 # OS
 .DS_Store
@@ -45,4 +44,5 @@
 # Ignore kamal config
 /.kamal
 
-mise.toml
+# Dev notes
+NOTES.md

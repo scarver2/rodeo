@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+
+  <body>
+    <%= yield %>
+    <h2>New contact form submission</h2>
+
+    <p>Name: <%= @name %></p>
+    <p>Email: <%= @email %></p>
+    <p>Phone: <%= @phone %></p>
+    <p>Message: <%= @message %></p>
+    <p>Request IP: <%= @request_ip %></p>
+    <p>User Agent: <%= @user_agent %></p>
+
+  </body>
+</html>

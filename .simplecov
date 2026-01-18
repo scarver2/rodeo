@@ -2,10 +2,15 @@
 
 require 'simplecov'
 
+SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+
 SimpleCov.start do
   enable_coverage :branch
   enable_for_subprocesses true
   # enable_coverage_for_eval
+
+  # minimum coverage threshold
+  minimum_coverage 90
 
   add_filter '/config/'
   add_filter '/spec/'

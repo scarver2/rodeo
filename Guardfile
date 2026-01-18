@@ -3,6 +3,8 @@
 # Guardfile
 # More info at https://github.com/guard/guard#readme
 
+require 'ostruct'
+
 def extensions
   {
     coffee: :js,

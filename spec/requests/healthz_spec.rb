@@ -1,11 +1,10 @@
+# spec/requests/healthz_spec.rb
 # frozen_string_literal: true
 
 require_relative '../rack_helper'
 
 RSpec.describe 'healthz', type: :request do
-  before do
-    get '/healthz'
-  end
+  before { get '/healthz' }
 
   subject(:response) { last_response }
 

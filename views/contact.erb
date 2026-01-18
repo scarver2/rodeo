@@ -66,13 +66,21 @@
           type="tel"
           id="phone"
           name="phone"
-                      required="required"
-
+          required="required"
           value="<%= @form.phone %>"
           autocomplete="phone"
           class="block w-full rounded-xl border border-stone-300 bg-white px-4 py-3 text-stone-900 shadow-sm outline-none placeholder:text-stone-400 focus:border-stone-900 focus:ring-2 focus:ring-stone-900/20"
           placeholder="(123) 456-7890"
           />
+          <div>
+          <p class="hint">
+          <input type="checkbox" id="sms" name="sms" />
+          By checking this box, I consent to receive text messages related to conversational purposes from Texas Embroidery Ranch.
+          You can reply "STOP" at any time to opt out. Message and data rates may apply.
+          Message frequency may vary, Text HELP to (*) for assistance.
+          For more information, please refer to our <a href="/privacy" target="_blank">Privacy Policy</a>, and
+          <a href="/sms-policy" target="_blank">SMS Terms and Conditions Policy</a> on our website.</p>
+          </div>
       </div>
 
       <div class="space-y-2">

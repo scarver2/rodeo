@@ -68,7 +68,8 @@ RSpec.describe ContactForm do
   end
 
   it 'captures request metadata when request is provided' do
-    params = { 'name' => 'John', 'email' => 'john@example.com', 'phone' => '123', 'message' => 'Hi' }
+    params = { 'name' => 'John', 'email' => 'john@example.com', 'phone' => '123', 'sms_opt_in' => 'on',
+               'message' => 'Hi' }
 
     request = instance_double(
       Sinatra::Request,

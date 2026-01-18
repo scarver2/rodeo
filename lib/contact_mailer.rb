@@ -105,6 +105,7 @@ class ContactMailer
       Name: #{safe_form_value(:name)}
       Email: #{safe_form_value(:email)}
       Phone: #{safe_form_value(:phone)}
+      SMS Opt-in: #{sms_consent_line}
       Message: #{safe_form_value(:message)}
 
       ---
@@ -119,6 +120,10 @@ class ContactMailer
 
     val = @form.public_send(method_name)
     val.to_s.strip.empty? ? '(unknown)' : val.to_s
+  end
+
+  def sms_consent_line
+    @form.sms_opted_in? ? 'Yes' : 'No'
   end
 
   def subject

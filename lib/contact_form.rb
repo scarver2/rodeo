@@ -3,7 +3,7 @@
 
 # The contact form
 class ContactForm
-  attr_accessor :name, :email, :phone, :message
+  attr_accessor :name, :email, :phone, :message, :sms_opt_in
   attr_reader :attachment, :honeypot, :ip, :user_agent, :referer
 
   HONEYPOT_FIELD = 'company'
@@ -21,6 +21,10 @@ class ContactForm
     # Spam detection fields
     @honeypot = fetch(HONEYPOT_FIELD)
     @started_at = fetch(:started_at)
+
+    # SMS/marketing consent checkbox.
+    # HTML checkboxes post "on" when checked and nothing when unchecked.
+    @sms_opt_in = truthy?(fetch(:sms_opt_in, false))
 
     # Single attachment payload:
     # { filename: "artwork.png", tempfile: <Tempfile> }
@@ -46,6 +50,15 @@ class ContactForm
 
   def spam?
     honeypot.present? || too_fast?
+  end
+
+  def sms_opted_in?
+    @sms_opt_in
+  end
+
+  # TODO: move truthy? to utility class
+  def truthy?(value)
+    %w[1 ON T TRUE].include?(value.to_s.strip.upcase)
   end
 
   def valid?
@@ -75,14 +88,15 @@ class ContactForm
     #   nil
   end
 
-  def fetch(key)
-    return nil if @params.nil?
+  # TODO: move fetch to utility class
+  def fetch(key, default = nil)
+    return default if @params.nil?
 
     # Allow callers to pass String keys directly (like 'company')
     if key.is_a?(String)
-      @params[key] || @params[key.to_sym]
+      @params[key] || @params[key.to_sym] || default
     else
-      @params[key] || @params[key.to_s]
+      @params[key] || @params[key.to_s] || default
     end
   end
 

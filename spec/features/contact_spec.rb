@@ -17,6 +17,9 @@ RSpec.describe 'Contact form', type: :feature do
     fill_in 'phone', with: phone
     fill_in 'message', with: message
 
+    # bypass time trap deterministically
+    find('input[name="started_at"]', visible: false).set((Time.now.to_f - 3).to_s)
+
     click_button 'Send'
 
     expect(page).to have_current_path('/contact/thank_you')

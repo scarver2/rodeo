@@ -35,7 +35,7 @@ class RodeoApp < Sinatra::Base
   end
 
   post '/contact/new' do
-    @form = ContactForm.new(params)
+    @form = ContactForm.new(params, request)
     if @form.valid?
       ContactMailer.new(@form).deliver
       redirect '/contact/thank_you', RedirectStatus::POST_TO_GET

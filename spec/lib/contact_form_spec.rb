@@ -66,4 +66,22 @@ RSpec.describe ContactForm do
   ensure
     tempfile.close!
   end
+
+  it 'captures request metadata when request is provided' do
+    params = { 'name' => 'John', 'email' => 'john@example.com', 'phone' => '123', 'sms_opt_in' => 'on',
+               'message' => 'Hi' }
+
+    request = instance_double(
+      Sinatra::Request,
+      ip: '203.0.113.10',
+      user_agent: 'RSpec UA',
+      referer: 'https://example.com/contact'
+    )
+
+    form = described_class.new(params, request)
+
+    expect(form.ip).to eq('203.0.113.10')
+    expect(form.user_agent).to eq('RSpec UA')
+    expect(form.referer).to eq('https://example.com/contact')
+  end
 end

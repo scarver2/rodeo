@@ -7,6 +7,7 @@ class ContactForm
   attr_reader :attachment, :honeypot
 
   HONEYPOT_FIELD = 'company'
+  MIN_FORM_SECONDS = 2.0
 
   def initialize(params)
     @params = params
@@ -16,7 +17,10 @@ class ContactForm
     @email   = fetch(:email)
     @phone   = fetch(:phone)
     @message = fetch(:message)
+
+    # Spam detection fields
     @honeypot = fetch(HONEYPOT_FIELD)
+    @started_at = fetch(:started_at)
 
     # Single attachment payload:
     # { filename: "artwork.png", tempfile: <Tempfile> }
@@ -26,7 +30,7 @@ class ContactForm
   def errors
     @errors = []
     if @params.present?
-      @errors << 'Error occurred' if honeypot.present?
+      @errors << 'Error occurred' if spam?
       @errors << 'Name is required' if name.blank?
       @errors << 'Email is required' if email.blank?
       @errors << 'Phone is required' if phone.blank?
@@ -36,14 +40,34 @@ class ContactForm
   end
 
   def spam?
-    honeypot.present?
+    honeypot.present? || too_fast?
   end
 
   def valid?
     name.present? && email.present? && phone.present? && !spam?
   end
 
+  def started_at
+    @started_at || Time.now.to_f
+  end
+
   private
+
+  def too_fast?
+    return false if @started_at.blank?
+
+    elapsed = Time.now.to_f - @started_at.to_f
+    elapsed < MIN_FORM_SECONDS
+  end
+
+  def started_at_seconds
+    return nil if started_at.nil?
+
+    # Expecting epoch float/string, e.g. "1737154312.123"
+    Float(started_at)
+  rescue ArgumentError, TypeError
+    nil
+  end
 
   def fetch(key)
     return nil if @params.nil?

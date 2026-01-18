@@ -32,7 +32,8 @@ RSpec.describe 'contact/new', type: :request do
       params = { name: Faker::Name.name,
                  email: Faker::Internet.email,
                  phone: Faker::PhoneNumber.phone_number,
-                 message: Faker::Lorem.sentence }
+                 message: Faker::Lorem.sentence,
+                 started_at: (Time.now.to_f - 3).to_s }
       post '/contact/new', params
     end
 
@@ -40,6 +41,7 @@ RSpec.describe 'contact/new', type: :request do
 
     its(:status) { is_expected.to eq(303) }
   end
+
   context 'when honeypot params are provided' do
     before do
       params = { name: Faker::Name.name,
@@ -47,6 +49,22 @@ RSpec.describe 'contact/new', type: :request do
                  phone: Faker::PhoneNumber.phone_number,
                  message: Faker::Lorem.sentence,
                  company: 'spam' }
+      post '/contact/new', params
+    end
+
+    subject(:response) { last_response }
+
+    its(:status) { is_expected.to eq(200) }
+    its(:body)   { is_expected.to match(/Error/i) }
+  end
+
+  context 'when time trap params are provided' do
+    before do
+      params = { name: Faker::Name.name,
+                 email: Faker::Internet.email,
+                 phone: Faker::PhoneNumber.phone_number,
+                 message: Faker::Lorem.sentence,
+                 started_at: Time.now.to_f.to_s }
       post '/contact/new', params
     end
 

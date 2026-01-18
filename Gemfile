@@ -17,7 +17,7 @@ group :development do
   gem 'binding_of_caller', require: false # required by better_errors
   gem 'debug', require: false
   gem 'guard', require: false
-  gem 'guard-bundler', require: false, github: 'scarver2/guard-bundler', branch: 'bundler-4'
+  gem 'guard-bundler', require: false
   gem 'guard-livereload', require: false
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
@@ -25,7 +25,7 @@ group :development do
   gem 'rack-livereload', require: false # required by guard-livereload
   gem 'rack-mini-profiler', require: false
   gem 'stackprof', require: false # optional, deeper profiling
-  gem 'terminal-notifier-guard', '~> 1.7', require: false # required by guard-livereload
+  gem 'terminal-notifier-guard', require: false # required by guard-livereload
 end
 
 group :development, :test do

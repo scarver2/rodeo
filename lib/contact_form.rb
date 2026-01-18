@@ -4,12 +4,12 @@
 # The contact form
 class ContactForm
   attr_accessor :name, :email, :phone, :message
-  attr_reader :attachment, :honeypot
+  attr_reader :attachment, :honeypot, :ip, :user_agent, :referer
 
   HONEYPOT_FIELD = 'company'
   MIN_FORM_SECONDS = 2.0
 
-  def initialize(params)
+  def initialize(params, request = nil)
     @params = params
 
     # Support both symbol and string keys (Rack params are often strings)
@@ -25,6 +25,11 @@ class ContactForm
     # Single attachment payload:
     # { filename: "artwork.png", tempfile: <Tempfile> }
     @attachment = normalize_attachment(fetch(:attachment))
+
+    # Request metadata
+    @ip = request&.ip
+    @user_agent = request&.user_agent
+    @referer = request&.referer
   end
 
   def errors
@@ -54,19 +59,20 @@ class ContactForm
   private
 
   def too_fast?
-    return false if @started_at.blank?
+    started = started_at_seconds
+    return false if started.nil? # allow missing/invalid started_at
 
-    elapsed = Time.now.to_f - @started_at.to_f
+    elapsed = Time.now.to_f - started
     elapsed < MIN_FORM_SECONDS
   end
 
   def started_at_seconds
-    return nil if started_at.nil?
+    return nil if @started_at.blank?
 
-    # Expecting epoch float/string, e.g. "1737154312.123"
-    Float(started_at)
-  rescue ArgumentError, TypeError
-    nil
+    # Expecting epoch float/string, e.g. "1737154312.123", fail if not
+    Float(@started_at)
+    # rescue ArgumentError, TypeError
+    #   nil
   end
 
   def fetch(key)

@@ -5,15 +5,15 @@
   </head>
 
   <body>
-    <%= yield %>
-    <h2>New contact form submission</h2>
-
+    <h1>Contact Form Submission</h1>
     <p>Name: <%= @name %></p>
     <p>Email: <%= @email %></p>
     <p>Phone: <%= @phone %></p>
+    <p>SMS Opt-in: <%= @sms_opt_in %></p>
     <p>Message: <%= @message %></p>
+    <hr />
     <p>Request IP: <%= @request_ip %></p>
-    <p>User Agent: <%= @user_agent %></p>
-
+    <p>User-Agent: <%= @user_agent %></p>
+    <p>Referrer: <%= @referer %></p>
   </body>
 </html>

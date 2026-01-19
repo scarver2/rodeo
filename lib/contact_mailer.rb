@@ -5,6 +5,10 @@ require 'pony'
 
 # The contact mailer
 class ContactMailer
+  TEMPLATE_DIR = File.expand_path('../views/mailers', __dir__)
+  HTML_TEMPLATE = 'contact.html.erb'
+  TEXT_TEMPLATE = 'contact.text.erb'
+
   def initialize(form)
     @form = form
   end
@@ -21,7 +25,8 @@ class ContactMailer
       to: ENV.fetch('CONTACT_TO'),
       reply_to: @form.email,
       subject: subject,
-      body: body,
+      body: text_body,
+      html_body: html_body,
       via: :smtp,
       via_options: smtp_options
     }
@@ -32,24 +37,28 @@ class ContactMailer
     hsh
   end
 
+  # Fetch the attachment hash from the form (if the form supports attachments).
   def attachment
     return nil unless @form.respond_to?(:attachment)
 
     @form.attachment
   end
 
+  # Extract the attachment filename from the normalized attachment hash.
   def attachment_filename
     return nil unless attachment
 
     attachment[:filename] || attachment['filename']
   end
 
+  # Extract the attachment tempfile (IO-like object) from the normalized attachment hash.
   def attachment_tempfile
     return nil unless attachment
 
     attachment[:tempfile] || attachment['tempfile']
   end
 
+  # Read the attachment tempfile from the beginning, in binary mode when supported.
   def read_attachment_tempfile
     tf = attachment_tempfile
     tf.binmode if tf.respond_to?(:binmode)
@@ -57,15 +66,18 @@ class ContactMailer
     tf.read
   end
 
+  # Build Pony-compatible attachments payload { "filename.ext" => <bytes> }, or nil if missing/empty.
   def attachment_payload
-    return nil unless attachment
-    return nil if attachment_filename.to_s.strip.blank?
-    return nil if attachment_tempfile.nil?
+    return nil unless attachment_present?
 
     data = read_attachment_tempfile
     return nil if data.blank?
 
     { attachment_filename => data }
+  end
+
+  def attachment_present?
+    attachment_filename.present? && attachment_tempfile.present?
   end
 
   def smtp_port
@@ -100,19 +112,38 @@ class ContactMailer
     val.strip.downcase == 'true'
   end
 
-  def body
-    <<~BODY
-      Name: #{safe_form_value(:name)}
-      Email: #{safe_form_value(:email)}
-      Phone: #{safe_form_value(:phone)}
-      SMS Opt-in: #{sms_consent_line}
-      Message: #{safe_form_value(:message)}
+  def html_body
+    render_template(template_path(HTML_TEMPLATE), assigns)
+  end
 
-      ---
-      IP: #{safe_form_value(:ip)}
-      User-Agent: #{safe_form_value(:user_agent)}
-      Referrer: #{safe_form_value(:referer)}
-    BODY
+  def text_body
+    render_template(template_path(TEXT_TEMPLATE), assigns)
+  end
+
+  def template_path(filename_or_path)
+    # Allow passing a full path, otherwise resolve within template_dir
+    if filename_or_path.to_s.include?(File::SEPARATOR)
+      File.expand_path(filename_or_path.to_s)
+    else
+      File.expand_path(filename_or_path.to_s, TEMPLATE_DIR)
+    end
+  end
+
+  def assigns
+    {
+      name: safe_form_value(:name),
+      email: safe_form_value(:email),
+      phone: safe_form_value(:phone),
+      message: safe_form_value(:message),
+      request_ip: safe_form_value(:ip),
+      user_agent: safe_form_value(:user_agent),
+      referer: safe_form_value(:referer),
+      sms_opt_in: sms_consent_line
+    }
+  end
+
+  def render_template(path, assigns_hash)
+    TemplateRenderer.new(path, assigns_hash).render
   end
 
   def safe_form_value(method_name)
@@ -128,5 +159,18 @@ class ContactMailer
 
   def subject
     ENV.fetch('CONTACT_SUBJECT', 'Contact Form')
+  end
+
+  # Renders ERB templates with instance variables (e.g. @name, @email, etc).
+  class TemplateRenderer
+    def initialize(template_path, assigns = {})
+      @template_path = template_path
+      assigns.each { |k, v| instance_variable_set("@#{k}", v) }
+    end
+
+    def render
+      template = File.read(@template_path)
+      ERB.new(template).result(binding)
+    end
   end
 end

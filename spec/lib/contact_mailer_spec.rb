@@ -17,12 +17,25 @@ RSpec.describe ContactMailer do
 
     ContactMailer.new(form).deliver
 
+    # TODO: DRY, refactor into array
     expect(Pony).to have_received(:mail).with(hash_including(reply_to: 'john@example.com'))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Name: John Doe')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Email: john@example.com')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Phone: 1234567890')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('SMS Opt-in: Yes')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Message: Hello')))
+    expect(Pony).to have_received(:mail).with(hash_including(body: include('Request IP: (unknown)')))
+    expect(Pony).to have_received(:mail).with(hash_including(body: include('User-Agent: (unknown)')))
+    expect(Pony).to have_received(:mail).with(hash_including(body: include('Referrer: (unknown)')))
+
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Name: John Doe')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Email: john@example.com')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Phone: 1234567890')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('SMS Opt-in: Yes')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Message: Hello')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Request IP: (unknown)')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('User-Agent: (unknown)')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Referrer: (unknown)')))
   end
 
   it 'includes message and request metadata in the body' do
@@ -36,6 +49,7 @@ RSpec.describe ContactMailer do
 
     described_class.new(form).deliver
 
+    # TODO: DRY, refactor into array
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Name: Jane Doe')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Email: jane@example.com')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Phone: 1234567890')))
@@ -44,6 +58,15 @@ RSpec.describe ContactMailer do
     expect(Pony).to have_received(:mail).with(hash_including(body: include('IP: 203.0.113.10')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('User-Agent: RSpec UA')))
     expect(Pony).to have_received(:mail).with(hash_including(body: include('Referrer: https://example.com/contact')))
+
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Name: Jane Doe')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Email: jane@example.com')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Phone: 1234567890')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('SMS Opt-in: No')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Message: Hello')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('IP: 203.0.113.10')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('User-Agent: RSpec UA')))
+    expect(Pony).to have_received(:mail).with(hash_including(html_body: include('Referrer: https://example.com/contact')))
   end
 
   it 'sends an email with a single attachment' do
